@@ -1,0 +1,41 @@
+setup.template.append_fields:
+- name: Location
+  type: geo_point
+- name: Zipcode
+  type: integer
+- name: Number_of_persons_injured
+  type: integer
+- name: Number_of_persons_killed
+  type: integer
+- name: Number_of_pedestrians_injured
+  type: integer
+- name: Number_of_pedestrians_killed
+  type: integer
+- name: Number_of_cyclists_injured
+  type: integer
+- name: Number_of_cyclists_killed
+  type: integer
+- name: Number_of_motorists_injured
+  type: integer
+- name: Number_of_motorists_killed
+  type: integer
+- name: Collsion_Id
+  type: integer
+ 
+filebeat.inputs:
+- paths:
+    - /data/crashes.csv
+  input_type: log
+  exclude_lines: ['^DATE']
+ 
+output.elasticsearch:
+ hosts: ["http://elasticsearch:9200"]
+ pipeline: crash_pipeline
+  
+logging.level: info
+logging.to_files: true
+logging.files:
+ path: /data/logs
+ name: filebeat
+ keepfiles: 7
+ permissions: 0644
